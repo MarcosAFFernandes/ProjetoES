@@ -1,0 +1,71 @@
+﻿@using ProjetoES.ApiModels
+@using ProjetoES.Models
+
+
+<nav class="navbar navbar-expand-lg">
+	<a class="navbar-brand">
+		<img class="image" src="skai-movies.png" alt="Alternate Text" />
+	</a>
+	<div>
+		<ul class="navbar-nav mr-auto">
+			<li class="nav-item active">
+				<input type="text" placeholder="Search" aria-label="Search" @oninput="OnInputChanged">
+				<ModalComponent IsVisible=popup IsVisibleChanged=OnModalVisibilityChanged Title=" ">
+					@if(Movies is not null){
+						@foreach(var movie in Movies)
+						{
+							<div class="poster">
+								<img  src="https://image.tmdb.org/t/p/w500/@movie.Poster" alt="Movie Poster" />
+								<h5>@movie.Title</h5>
+							</div>
+						}
+					}
+					else
+					{
+						<p>Pesquise um Filme</p>
+					}
+				</ModalComponent>
+			</li>
+			<li class="nav-item active">
+				<a class="nav-link text-white" href="#">
+					Fórum
+					<img class="image" src="forum.png" alt="Alternate Text" />
+				</a>
+			</li>
+			<li class="nav-item active">
+				
+				<a class="nav-link text-white" href="/Collection">
+					Coleções
+					<img class="image" src="collection.png" alt="Alternate Text" />
+				</a>
+			</li>
+			<li class="nav-item active">
+				<a class="nav-link text-white" href="#">Perfil</a>
+			</li>
+		</ul>
+	</div>
+</nav>  
+@code {
+	MovieApi api;
+	private List<Movie> Movies;
+	bool popup = false;
+
+	protected override void OnInitialized()
+	{
+		api = new MovieApi();
+	}
+
+	private async void OnInputChanged(ChangeEventArgs e)
+	{
+		popup = true;
+		var searchText = e.Value.ToString();
+		Console.WriteLine(searchText);
+		Movies = await api.GetMovie(searchText);
+		Console.WriteLine(Movies[0].Title);
+	}
+	private void OnModalVisibilityChanged(bool isVisible)
+	{
+		popup = isVisible;
+	}
+	
+}

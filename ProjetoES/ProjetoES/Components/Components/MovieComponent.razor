@@ -1,0 +1,43 @@
+﻿@using ProjetoES.Models
+
+
+<div class="movie">
+
+	<img class="poster" src="https://image.tmdb.org/t/p/w500/@movie.Poster" alt="Movie Poster" /> 
+	<h6>@movie.Title</h6>
+	 
+	<div class="row gx-0 ">
+		<div class="flex col">
+			<img class="star " src="star-removebg-preview.png" alt="8.8" />
+			<p >@movie.Voting</p>
+		</div>
+		<div class="like col ">
+			<button @onclick="changeFavourite">
+				@if(!favourite){
+					<img src="fav.png" alt="Like" />
+				}
+				else
+				{
+					<img src="Heart.png" alt="Liked" />
+				}
+			</button>
+		</div>
+	</div>
+	<button class="text-white">+ Adicionar à coleção</button>
+</div>
+
+<style>
+	
+</style>
+@code {
+	[Parameter]
+	public Movie movie { get; set; }
+
+	Boolean favourite = false;
+	private async void changeFavourite()
+	{
+		
+		Console.WriteLine(favourite);
+		favourite = !favourite;
+	}
+}
