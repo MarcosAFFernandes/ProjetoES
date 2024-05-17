@@ -8,12 +8,12 @@
         {
             Posts = new List<Post>();
         }
-        public void AddPost(Post post)  // Alterado para singular
+        public void AddPost(Post post)
         {
             Posts.Add(post);
         }
 
-        public void RemovePost(Post post)  // Alterado para singular
+        public void RemovePost(Post post) 
         {
             Posts.Remove(post);
         }
