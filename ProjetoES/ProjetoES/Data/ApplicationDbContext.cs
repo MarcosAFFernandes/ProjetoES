@@ -13,6 +13,8 @@ namespace ProjetoES.Data
 
         public DbSet<Collections> Favourites { get; set; }
 
+        public DbSet<Post> Posts { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
