@@ -1,11 +1,13 @@
-﻿namespace Projeto_ES.Server.Padroes
+﻿using Microsoft.AspNetCore.Components;
+
+namespace ProjetoES.Padroes
 {
 	public interface ICommentItem
-	{
-		public string Username { get; }
+    {
+        public string User { get; }
 		public string Texto { get; }
-		public static int ID { get; }
+		public int ID { get; }
 
-		public void Display();
+		public RenderFragment RenderComponent();
 	}
 }

@@ -1,0 +1,26 @@
+﻿@page "/CriarPost"
+@using ProjetoES.Models;
+@using ProjetoES.Components;
+
+<div>
+    <input type="text" @bind="@CurrentTitle" @oninput="@((e) => { CurrentTitle=(string)e.Value;})" />
+    <input type="text" @bind="@CurrentText" @oninput="@((e) => { CurrentText=(string)e.Value;})" />
+</div>
+
+<button @onclick="criarPost">Criar Post</button>
+
+@titulo
+@texto
+
+@code{
+    private String CurrentTitle { get; set; } = "";
+    private String CurrentText{get; set;} = "";
+    private String texto { get; set; }
+    private String titulo { get; set; }
+
+    private void criarPost(){
+        Post post = new Post("User", CurrentTitle, CurrentText);
+        texto = post.texto;
+        titulo = post.titulo;
+    }
+}

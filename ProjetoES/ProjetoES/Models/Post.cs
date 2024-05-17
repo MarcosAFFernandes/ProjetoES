@@ -1,33 +1,39 @@
-﻿using Projeto_ES.Server.Padroes;
+﻿using ProjetoES.Padroes;
 
 namespace ProjetoES.Models
 {
-    public class Post
-    {
-        public string user { get; set; }
-        public int ID { get; set; }
-        public string titulo { get; set; }
-        public string texto { get; set; }
+	public class Post
+	{
+		public String user { get; set; }
+		public static int ID { get; set; } = 0;
+		public String titulo { get; set; }
+		public String texto { get; set; }
+		public int id {  get; set; }
 
-        private readonly List<ICommentItem> comments = new List<ICommentItem>();
+		private readonly List<ICommentItem> comments = new List<ICommentItem>();
 
-        public Post(string User, string Titulo, string Texto)
-        {
-            user = User;
-            titulo = Titulo;
-            texto = Texto;
+		public Post(String User, String Titulo, String Texto)
+		{
+			user = User;
+			titulo = Titulo;
+			texto = Texto;
+			id = ID;
+			ID++;
         }
+		
+		public void AddComment(ICommentItem comment)
+		{
+			comments.Add(comment);
+		}
 
-        public void addComment(ICommentItem comment)
-        {
-            comments.Add(comment);
-        }
+		public void RemoveComment(ICommentItem comment)
+		{
+			comments.Remove(comment);
+		}
 
-        public void removeComment(ICommentItem comment)
-        {
-            comments.Remove(comment);
-        }
-
-
-    }
+		public int getID()
+		{
+			return ID;
+		}
+	}
 }
