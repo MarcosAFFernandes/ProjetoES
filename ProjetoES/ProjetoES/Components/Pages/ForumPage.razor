@@ -1,36 +1,37 @@
 ﻿@page "/ForumPage"
 @rendermode InteractiveServer
+@using Microsoft.EntityFrameworkCore
+@using ProjetoES.Data
 @using ProjetoES.Models;
+@inject ApplicationDbContext _context
 @using ProjetoES.Components.Components;
 
 
 <h3>FORUM</h3>
 <NavLink href="/CriarPost"><button>  Criar Post</button></NavLink>
 <div>
-    @foreach (var post in ListaPosts)
-    {
-        var url = $"/PostPage/{post.id}";
-        <NavLink href="@url">
-            <PostsComponent post=post></PostsComponent>
-        </NavLink>
-    }
-    @if (ListaPosts == null)
-    {
-        <h3> TA MIÇPPPPPPPPPPPP</h3>
-    }
+    @if(forum.Posts.Count == 0)
+	{
+		<h3> Nao existem posts</h3>
+	}
+	else
+	{
+		<h3> Posts</h3>
+        @foreach (var post in forum.Posts)
+        {
+            var url = $"/PostPage/{post.Id}";
+            <NavLink href="@url">
+                <PostsComponent post=post></PostsComponent>
+            </NavLink>
+        }
+	})
+    
 </div>
 
 @code {
     private Forum forum = Forum.GetInstance();
-    private List<Post> ListaPosts = new List<Post>();
-    private Post post1 = new Post("Coelho1", "ASSUNTO CARL1", "Ola cachorrasdaaaaaaaaaaaa Çlorem ipsum1");
-    private Post post2 = new Post("Coelho2", "ASSUNTO CARL2", "Ola cachorrasdaaaaaaaaaaaa Çlorem ipsum2");
-    private Post post3 = new Post("Coelh3", "ASSUNTO CARL3", "Ola cachorrasdaaaaaaaaaaaa Çlorem ipsum3");
     protected override async Task OnInitializedAsync()
     {
-        forum.AddPost(post1);
-        forum.AddPost(post2);
-        forum.AddPost(post3);
-        ListaPosts = forum.Posts;
+        forum.Posts = await _context.Posts.ToListAsync();
     }
 }

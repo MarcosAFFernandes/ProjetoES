@@ -200,9 +200,6 @@ namespace ProjetoES.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int>("FavouritesId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -238,8 +235,6 @@ namespace ProjetoES.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FavouritesId");
-
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -259,11 +254,18 @@ namespace ProjetoES.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId")
+                        .IsUnique();
 
                     b.ToTable("Favourites");
                 });
@@ -331,6 +333,31 @@ namespace ProjetoES.Migrations
                     b.ToTable("Movie");
                 });
 
+            modelBuilder.Entity("ProjetoES.Models.Post", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("texto")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("titulo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("user")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Posts");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -389,15 +416,15 @@ namespace ProjetoES.Migrations
                         .HasForeignKey("MovieId");
                 });
 
-            modelBuilder.Entity("ProjetoES.Data.ApplicationUser", b =>
+            modelBuilder.Entity("ProjetoES.Models.Collections", b =>
                 {
-                    b.HasOne("ProjetoES.Models.Collections", "Favourites")
-                        .WithMany()
-                        .HasForeignKey("FavouritesId")
+                    b.HasOne("ProjetoES.Data.ApplicationUser", "ApplicationUser")
+                        .WithOne("Favourites")
+                        .HasForeignKey("ProjetoES.Models.Collections", "ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Favourites");
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("ProjetoES.Models.Movie", b =>
@@ -405,6 +432,12 @@ namespace ProjetoES.Migrations
                     b.HasOne("ProjetoES.Models.Collections", null)
                         .WithMany("Movies")
                         .HasForeignKey("CollectionsId");
+                });
+
+            modelBuilder.Entity("ProjetoES.Data.ApplicationUser", b =>
+                {
+                    b.Navigation("Favourites")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProjetoES.Models.Collections", b =>

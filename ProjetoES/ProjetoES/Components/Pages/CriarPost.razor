@@ -1,6 +1,10 @@
 ﻿@page "/CriarPost"
 @rendermode InteractiveServer
+@using ProjetoES.Data
 @using ProjetoES.Models;
+@inject ApplicationDbContext _context
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
 
 <div>
     <input type="text" @bind="@CurrentTitle"/>
@@ -9,21 +13,21 @@
 
 <button @onclick="criarPost">Criar Post</button>
 
-@CurrentText
-@CurrentTitle
-@titulo
-@texto
-
 @code {
     private String CurrentTitle { get; set; }
     private String CurrentText { get; set; }
     private String texto { get; set; }
     private String titulo { get; set; }
 
-    private void criarPost()
+    private async void criarPost()
     {
-        Post post = new Post("User", CurrentTitle, CurrentText);
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        Post post = new Post(user.Identity.Name, CurrentTitle, CurrentText);
+        _context.Posts.Add(post);
+        await _context.SaveChangesAsync();
         texto = post.texto;
         titulo = post.titulo;
+        
     }
 }
