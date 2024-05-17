@@ -10,15 +10,28 @@
 		<ul class="navbar-nav mr-auto">
 			<li class="nav-item active">
 				<input type="text" placeholder="Search" aria-label="Search" @oninput="OnInputChanged">
+
+				
 				<ModalComponent IsVisible=popup IsVisibleChanged=OnModalVisibilityChanged Title=" ">
-					@if(Movies is not null){
-						@foreach(var movie in Movies)
-						{
-							<div class="poster">
-								<img  src="https://image.tmdb.org/t/p/w500/@movie.Poster" alt="Movie Poster" />
-								<h5>@movie.Title</h5>
-							</div>
-						}
+					 @if (Movies is not null && Movies.Any())
+                    {
+                        @foreach (var movie in Movies)
+                        {
+                            if (movie != null)
+                            {
+								Console.WriteLine();
+								var url = $"/MoviePage/{movie.Id}";
+                                <NavLink href="@url" class="text-white" style="text-decoration:none">
+                                    <div class="poster">
+                                        <img src="https://image.tmdb.org/t/p/w500/@movie.Poster" alt="Movie Poster" />
+                                        <h5>@movie.Title</h5>
+                                    </div>
+                                </NavLink>
+								
+
+								
+                            }
+                        }
 					}
 					else
 					{
@@ -46,26 +59,36 @@
 	</div>
 </nav>  
 @code {
+	[Parameter]
+	public RenderFragment ChildContent { get; set; }
+
 	MovieApi api;
 	private List<Movie> Movies;
 	bool popup = false;
 
-	protected override void OnInitialized()
+	protected override async Task OnInitializedAsync()
 	{
 		api = new MovieApi();
 	}
 
+
 	private async void OnInputChanged(ChangeEventArgs e)
 	{
-		popup = true;
-		var searchText = e.Value.ToString();
-		Console.WriteLine(searchText);
-		Movies = await api.GetMovie(searchText);
-		Console.WriteLine(Movies[0].Title);
+		if(e.Value is not null && e.Value != ""){
+			popup = true;
+			var searchText = e.Value.ToString();
+			Console.WriteLine(searchText);
+			Movies = await api.GetMovie(searchText);
+		}
+		else
+		{
+			e.Value = "";
+		}
 	}
 	private void OnModalVisibilityChanged(bool isVisible)
 	{
 		popup = isVisible;
 	}
+
 	
 }
