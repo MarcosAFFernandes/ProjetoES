@@ -1,0 +1,34 @@
+﻿@page "/MoviePage/{id:int}"
+@using ProjetoES.ApiModels
+@using ProjetoES.Models
+@using ProjetoES.Components.Components
+
+@inject NavigationManager NavigationManager
+
+
+<NavBar></NavBar>
+@if (movie is not null)
+{
+	<MoviePageComponent movie=@movie> </MoviePageComponent>
+
+}
+else{
+<p>Loading...</p>
+}
+
+@code {
+	[Parameter]
+	public int id { get; set; }
+
+	MovieApi api = new MovieApi();
+	Movie movie;
+	
+
+	protected override async Task OnInitializedAsync()
+	{
+		movie = await api.GetMovieById(id);
+		Console.WriteLine($"Categoria: {movie.Category[0].Name}");
+	}
+
+	
+}

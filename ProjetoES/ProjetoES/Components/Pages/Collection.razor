@@ -1,0 +1,33 @@
+﻿@page "/Collection"
+@using ProjetoES.ApiModels
+@using ProjetoES.Models
+
+<NavBar></NavBar>
+@if (movies is not null)
+{
+	@foreach (var movie in movies)
+	{
+		var url = $"/MoviePage/{@movie.Id}";
+		<NavLink href="@url" class="text-white" style="text-decoration:none">
+			<CategoryComponent movie=@movie></CategoryComponent>
+		</NavLink>
+		
+	}
+}
+else
+{
+	<p>Loading...</p>
+}
+
+
+@code {
+
+	List<Movie> movies;
+	MovieApi api = new MovieApi();
+
+	protected override async Task OnInitializedAsync()
+	{
+		movies = await api.GetMovie("Fight CLub");
+	}
+
+}

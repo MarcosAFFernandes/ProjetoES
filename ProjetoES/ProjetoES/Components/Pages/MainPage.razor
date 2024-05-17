@@ -1,0 +1,39 @@
+﻿@page "/"
+@using ProjetoES.ApiModels
+@using ProjetoES.Models
+@using ProjetoES.Components.Components
+
+<NavBar></NavBar>
+
+<h3>Filmes do momento:</h3><br />
+
+@if (movies is not null)
+{
+	<div class="row mt-3">
+		@foreach (var movie in movies)
+		{
+			var url = $"/MoviePage/{movie.Id}";
+			<div class="col-md-3 mb-2">
+				<NavLink href="@url" class="text-white" style="text-decoration:none">
+					<MovieComponent movie="@movie"></MovieComponent>
+				</NavLink>
+
+				
+			</div>
+		}
+	</div>
+
+}
+
+
+@code {
+	MovieApi api = new MovieApi();
+	int n = 0;
+	List<Movie> movies;
+	int i = 0;
+
+	protected override async Task OnInitializedAsync()
+	{
+		movies = await api.GetPopular();
+	}
+}
