@@ -1,4 +1,5 @@
 ﻿@page "/ForumPage"
+@rendermode InteractiveServer
 @using ProjetoES.Models;
 @using ProjetoES.Components.Components;
 
@@ -20,7 +21,7 @@
 </div>
 
 @code {
-    private Forum forum = new Forum();
+    private Forum forum = Forum.GetInstance();
     private List<Post> ListaPosts = new List<Post>();
     private Post post1 = new Post("Coelho1", "ASSUNTO CARL1", "Ola cachorrasdaaaaaaaaaaaa Çlorem ipsum1");
     private Post post2 = new Post("Coelho2", "ASSUNTO CARL2", "Ola cachorrasdaaaaaaaaaaaa Çlorem ipsum2");
