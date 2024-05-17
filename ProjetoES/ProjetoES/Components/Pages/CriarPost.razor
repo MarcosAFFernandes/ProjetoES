@@ -1,24 +1,27 @@
 ﻿@page "/CriarPost"
+@rendermode InteractiveServer
 @using ProjetoES.Models;
-@using ProjetoES.Components;
 
 <div>
-    <input type="text" @bind="@CurrentTitle" @oninput="@((e) => { CurrentTitle=(string)e.Value;})" />
-    <input type="text" @bind="@CurrentText" @oninput="@((e) => { CurrentText=(string)e.Value;})" />
+    <input type="text" @bind="@CurrentTitle"/>
+    <input type="text" @bind="@CurrentText"/>
 </div>
 
 <button @onclick="criarPost">Criar Post</button>
 
+@CurrentText
+@CurrentTitle
 @titulo
 @texto
 
-@code{
-    private String CurrentTitle { get; set; } = "";
-    private String CurrentText{get; set;} = "";
+@code {
+    private String CurrentTitle { get; set; }
+    private String CurrentText { get; set; }
     private String texto { get; set; }
     private String titulo { get; set; }
 
-    private void criarPost(){
+    private void criarPost()
+    {
         Post post = new Post("User", CurrentTitle, CurrentText);
         texto = post.texto;
         titulo = post.titulo;
